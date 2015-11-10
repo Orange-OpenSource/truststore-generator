@@ -1,4 +1,4 @@
-# truststore-generator
+# truststore-generator [![Build Status](https://travis-ci.org/Orange-OpenSource/truststore-generator.svg?branch=master)](https://travis-ci.org/Orange-OpenSource/truststore-generator)
 
 Generate a java truststore from json representation (that could be fetched from environmment properties)
 
