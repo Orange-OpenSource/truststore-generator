@@ -1,7 +1,6 @@
 package com.orange.clara.cloud.truststore;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.security.cert.Certificate;
@@ -34,12 +33,6 @@ public class TrustStoreGeneratorTest {
             "mjPkk88buTsMqzvkfey8HBaoZb9AiVYPn2if8HINvCOKaaLe7ixzgBGNkg==\r\n" +
             "-----END CERTIFICATE-----";
 
-    @Before
-    public void setup(){
-        Assert.assertNull(System.getProperty(TrustStoreGenerator.SSL_TRUST_STORE_SYSTEM_PROPERTY));
-        Assert.assertNull(System.getProperty(TrustStoreGenerator.SSL_TRUST_STORE_PASSWORD_SYSTEM_PROPERTY));
-    }
-
     @Test
     public void should_generate_truststore() throws Exception {
         final ArrayList<Certificate> certificates = new ArrayList<>();
@@ -47,8 +40,14 @@ public class TrustStoreGeneratorTest {
         certificates.add(new CertificateFactory().newInstance(CERTIFICATE));
         TrustStoreProperty trustStoreProperty = new TrustStoreProperty(certificates);
         TrustStoreGenerator trustStoreGenerator = new TrustStoreGenerator();
-        trustStoreGenerator.generate(trustStoreProperty);
-        Assert.assertNotNull(System.getProperty(TrustStoreGenerator.SSL_TRUST_STORE_SYSTEM_PROPERTY));
-        Assert.assertNotNull(System.getProperty(TrustStoreGenerator.SSL_TRUST_STORE_PASSWORD_SYSTEM_PROPERTY));
+
+        final TrustStoreInfo trustStoreFile = trustStoreGenerator.generate(trustStoreProperty);
+
+        //there should be a truststore file
+        Assert.assertNotNull(trustStoreFile.getTrustStorefFile());
+        Assert.assertNotNull(trustStoreFile.getTrustStorefFile().exists());
+
+        //there should be a truststore password
+        Assert.assertNotNull(trustStoreFile.getPassword());
     }
 }
